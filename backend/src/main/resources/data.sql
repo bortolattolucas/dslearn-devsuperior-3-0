@@ -12,3 +12,6 @@ INSERT INTO tb_user_role (user_id, role_id) VALUES (2, 2);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (3, 1);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (3, 2);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (3, 3);
+
+-- imagem pesquisada no google, usando a ferramenta de filtro para licensa creative commons e cor preto e branco pra img gray
+INSERT INTO tb_course (name, img_uri, img_gray_uri) VALUES ('Bootcamp HTML', 'https://upload.wikimedia.org/wikipedia/commons/1/10/CSS3_and_HTML5_logos_and_wordmarks.svg', 'https://upload.wikimedia.org/wikipedia/commons/8/8a/HTML5.png');
