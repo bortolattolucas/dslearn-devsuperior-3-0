@@ -10,7 +10,9 @@ import java.time.Instant;
 public class Task extends Lesson {
 
     private String description;
+    // quantas questões tem
     private Integer questionCount;
+    // precisa acertar quantas pra ser aprovado
     private Integer approvalCount;
     private Double weight;
 
