@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -54,6 +55,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private JwtTokenEnhancer jwtTokenEnhancer;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     // configuração sobre as credenciais do usuário
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -67,8 +71,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient(clientId)
                 .secret(bCryptPasswordEncoder.encode(clientSecret))
                 .scopes("read", "write")
-                .authorizedGrantTypes("password") // tem varios tipos no oauth2
-                .accessTokenValiditySeconds(jwtDuration); //token dura 1 dia por padrao do properties
+                .authorizedGrantTypes("password", "refresh_token") // tem varios tipos no oauth2
+                .accessTokenValiditySeconds(jwtDuration)
+                .refreshTokenValiditySeconds(jwtDuration);
     }
 
     // configuração dos endpoints, sobre quem vai autorizar em qual formato de token
@@ -81,6 +86,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(jwtTokenStore)
                 .accessTokenConverter(jwtAccessTokenConverter)
-                .tokenEnhancer(chain); // seta a cadeia de aprimoramento criada para os JWT usados
+                .tokenEnhancer(chain) // seta a cadeia de aprimoramento criada para os JWT usados
+                .userDetailsService(userDetailsService);
     }
 }
