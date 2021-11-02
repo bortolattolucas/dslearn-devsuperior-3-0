@@ -7,7 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import tech.lucasbortolatto.dslearn.services.exceptions.DatabaseException;
+import tech.lucasbortolatto.dslearn.services.exceptions.ForbiddenException;
 import tech.lucasbortolatto.dslearn.services.exceptions.ResourceNotFoundException;
+import tech.lucasbortolatto.dslearn.services.exceptions.UnauthorizedException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
@@ -55,5 +57,17 @@ public class ResourceExceptionHandler {
         }
 
         return ResponseEntity.status(err.getStatus()).body(err);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<OAuthCustomError> forbidden(ForbiddenException e, HttpServletRequest request) {
+        OAuthCustomError err = new OAuthCustomError("Forbidden", e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<OAuthCustomError> unauthorized(UnauthorizedException e, HttpServletRequest request) {
+        OAuthCustomError err = new OAuthCustomError("Unauthorized", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err);
     }
 }
