@@ -2,9 +2,7 @@ package tech.lucasbortolatto.dslearn.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 // teremos apenas task e content, nunca uma lesson "pura"
 // como essa classe não pode ser instanciada, ela é abstrata
@@ -40,6 +38,9 @@ public abstract class Lesson implements Serializable {
                     @JoinColumn(name = "offer_id")
             })
     private Set<Enrollment> enrollmentsDone = new HashSet<>();
+
+    @OneToMany(mappedBy = "lesson")
+    private List<Deliver> deliveries = new ArrayList<>();
 
     public Lesson() {
     }
@@ -85,6 +86,10 @@ public abstract class Lesson implements Serializable {
 
     public Set<Enrollment> getEnrollmentsDone() {
         return enrollmentsDone;
+    }
+
+    public List<Deliver> getDeliveries() {
+        return deliveries;
     }
 
     @Override
